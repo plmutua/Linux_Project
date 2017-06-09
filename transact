@@ -1,16 +1,6 @@
 #!/bin/bash
 
 
-
-
-
-#Displays account of the user
-disp_account(){
-echo "Your Wallet is:"
-./geth --testnet --fast -exec "eth.accounts" attach 
-}
-
-
 #Check geth location
 ETH=$(which geth &>/dev/null)   
 check_geth() {
@@ -87,7 +77,7 @@ if [ ! "$(ps -A | grep ether*)" ];
 if [ ! -z $1 ];
     then
         if [ $1 = "-a" ];
-then
+	then
 	    TRANSACTION="$(send $2 $3 $4 $5)"
 	    echo $TRANSACTION
 	    exit	
@@ -108,16 +98,26 @@ do
 	printf "Password:\n"
 	read -s PASSWD
 
+	printf "Processing transaction"
+
 	TRANSACTION="$(send $SENDER $RECEIVER $AMOUNT $PASSWD)"
-	echo "Transaction successful. Transaction id is:"
+	echo "Transaction code is:"
 	echo $TRANSACTION
-        
-	exit	
-       
+	
+		
+	printf "Do you want make another transaction? (Y/N).\n"
+	read ANS
+	if [ ! -z $ANS ];
+    		then
+        	if [ $ANS != "Y" ];
+        	then
+            exit
+	fi
+	fi
+
 done
 
 } 
 
 
 cli_main $*
-
